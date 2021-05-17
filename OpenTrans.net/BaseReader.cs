@@ -6,9 +6,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Xml;
 
 namespace OpenTrans.net
@@ -26,9 +27,55 @@ namespace OpenTrans.net
     /// <summary>
     /// This class contains base functionality that is useable by readers for all OpenTrans message types
     /// </summary>
-    internal class BaseReader
+    internal abstract class BaseReader<T> where T : new()
     {
-        protected DateTime? _nodeAsDateTime(XmlNode node, string xpath, XmlNamespaceManager nsmgr = null)
+        protected static XmlNamespaceManager nsmgr;
+
+        protected static XmlDocument _loadXml(Stream stream)
+        {
+            if (!stream.CanRead)
+            {
+                throw new IllegalStreamException("Cannot read from stream");
+            }
+
+            XmlDocument doc = new XmlDocument();
+            doc.Load(stream);
+            nsmgr = new XmlNamespaceManager(doc.DocumentElement.OwnerDocument.NameTable);
+            nsmgr.AddNamespace("openTrans", "http://www.opentrans.org/XMLSchema/2.1");
+            nsmgr.AddNamespace("xsi", "http://www.w3.org/2001/XMLSchema-instance");
+            nsmgr.AddNamespace("bmecat", "http://www.bmecat.org/bmecat/2005");
+            nsmgr.AddNamespace("xmime", "http://www.w3.org/2005/05/xmlmime");
+            nsmgr.AddNamespace("xsig", "http://www.w3.org/2000/09/xmldsig#");
+
+            return doc;
+        }
+
+        /// <summary>
+        /// Method to override in child classes
+        /// </summary>
+        /// <param name="stream"></param>
+        /// <returns></returns>
+        public abstract T Load(Stream stream);
+
+        /// <summary>
+        /// Used to load from file
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <returns></returns>
+        /// <exception cref="FileNotFoundException"></exception>
+        public T Load(string filename)
+        {
+            if (!System.IO.File.Exists(filename))
+            {
+                throw new FileNotFoundException();
+            }
+            using (var stream = new FileStream(filename, FileMode.Open, FileAccess.Read))
+            {
+                return Load(stream);
+            }
+        }
+
+        protected static DateTime? _nodeAsDateTime(XmlNode node, string xpath, XmlNamespaceManager nsmgr = null)
         {
             string _temp = XmlUtils.NodeAsString(node, xpath, nsmgr);
 
@@ -63,7 +110,7 @@ namespace OpenTrans.net
         } // !_readDateTime()
 
 
-        protected OrderItem _readItem(XmlNode node, XmlNamespaceManager nsmgr = null)
+        protected static OrderItem _readItem(XmlNode node, XmlNamespaceManager nsmgr = null)
         {
             if (node == null)
             {
@@ -100,7 +147,7 @@ namespace OpenTrans.net
                 LineItemId = XmlUtils.NodeAsString(node, "./*[local-name()='LINE_ITEM_ID']", nsmgr),
                 ProductId = _readProductId(node.SelectSingleNode("./*[local-name()='PRODUCT_ID']", nsmgr), nsmgr),
                 Quantity = XmlUtils.NodeAsDecimal(node, "./*[local-name()='QUANTITY']", nsmgr),
-                OrderUnit = default(QuantityCodes).FromString(XmlUtils.NodeAsString(node, "./*[local-name()='ORDER_UNIT']", nsmgr)),
+                OrderUnit = QuantityCode.FromString(XmlUtils.NodeAsString(node, "./*[local-name()='ORDER_UNIT']", nsmgr)),
                 LineAmount = XmlUtils.NodeAsDecimal(node, "./*[local-name()='PRICE_LINE_AMOUNT']", nsmgr),
                 DeliveryDate = deliveryDate,
                 ProductFeatures = features,
@@ -112,7 +159,7 @@ namespace OpenTrans.net
         } // !_readItem()
 
 
-        protected Feature _readFeature(XmlNode node, XmlNamespaceManager nsmgr = null)
+        protected static Feature _readFeature(XmlNode node, XmlNamespaceManager nsmgr = null)
         {
             if (node == null)
             {
@@ -126,12 +173,12 @@ namespace OpenTrans.net
                 Description = XmlUtils.NodeAsString(node, "./*[local-name()='FDESCRIPTION']", nsmgr),
                 Order = XmlUtils.NodeAsString(node, "./*[local-name()='FORDER']", nsmgr),
                 Template = XmlUtils.NodeAsString(node, "./*[local-name()='FTEMPLATE']", nsmgr),
-                Unit = default(QuantityCodes).FromString(XmlUtils.NodeAsString(node, "./*[local-name()='FUNIT']", nsmgr)),
+                Unit = QuantityCode.FromString(XmlUtils.NodeAsString(node, "./*[local-name()='FUNIT']", nsmgr)),
             };
         } // !_readFeature()
 
 
-        private ProductId _readProductId(XmlNode node, XmlNamespaceManager nsmgr = null)
+        private static ProductId _readProductId(XmlNode node, XmlNamespaceManager nsmgr = null)
         {
             if (node == null)
             {
@@ -156,10 +203,10 @@ namespace OpenTrans.net
             };
 
             return id;
-        } // !_readProductId() 
+        } // !_readProductId()
 
 
-        private ProductPriceFix _readProductPriceFix(XmlNode node, XmlNamespaceManager nsmgr = null)
+        private static ProductPriceFix _readProductPriceFix(XmlNode node, XmlNamespaceManager nsmgr = null)
         {
             if (node == null)
             {
@@ -187,7 +234,7 @@ namespace OpenTrans.net
         } // !_readProductId()
 
 
-        protected Party _readParty(XmlNode node, XmlNamespaceManager nsmgr = null)
+        protected static Party _readParty(XmlNode node, XmlNamespaceManager nsmgr = null)
         {
             if (node == null)
             {
@@ -232,7 +279,7 @@ namespace OpenTrans.net
             }
 
             string _emailAddress = XmlUtils.NodeAsString(node, "./*[local-name()='ADDRESS']/*[local-name()='EMAIL']", nsmgr);
-            if (!String.IsNullOrEmpty(_emailAddress))
+            if (!string.IsNullOrEmpty(_emailAddress))
             {
                 retval.EmailAddress = _emailAddress;
             }

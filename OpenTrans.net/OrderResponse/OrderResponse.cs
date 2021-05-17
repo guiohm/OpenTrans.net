@@ -6,9 +6,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -65,18 +65,17 @@ namespace OpenTrans.net
 
         /// <summary>
         /// Loads an order response from the given stream.
-        /// 
+        ///
         /// Make sure that the stream is open. After successful reading, the stream is left open, i.e.
         /// the caller of the library has to take care of the stream lifecycle.
-        /// 
+        ///
         /// If the stream is not open or readable, an IllegalStreamException exception is raised.
         /// </summary>
         /// <param name="stream"></param>
         /// <returns></returns>
         public static OrderResponse Load(Stream stream)
         {
-            OrderResponseReader reader = new OrderResponseReader();
-            return reader.Load(stream);
+            return new OrderResponseReader().Load(stream);
         } // !Load()
 
 
@@ -88,14 +87,13 @@ namespace OpenTrans.net
         /// <returns></returns>
         public static OrderResponse Load(string filename)
         {
-            OrderResponseReader reader = new OrderResponseReader();
-            return reader.Load(filename);
+            return new OrderResponseReader().Load(filename);
         } // !Load()
 
 
         /// <summary>
         /// Saves the order response object into a stream.
-        /// 
+        ///
         /// The stream position will be reset to the original position after writing is finished.
         /// This allows easy further processing of the stream.
         /// </summary>

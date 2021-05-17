@@ -17,9 +17,6 @@
  * under the License.
  */
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace OpenTrans.net
 {
@@ -197,14 +194,18 @@ namespace OpenTrans.net
         SEC
     }
 
-
-    internal static class QuantityCodesExtensions
+    public class QuantityCode
     {
-        public static QuantityCodes FromString(this QuantityCodes _, string s)
+
+        /// <summary>
+        /// Returns a QuantiCodes Enum mathing the string or QuantityCodes.Unknown if not found
+        /// </summary>
+        /// <returns></returns>
+        public static QuantityCodes FromString(string s)
         {
             try
             {
-                return string.IsNullOrWhiteSpace(s) 
+                return string.IsNullOrWhiteSpace(s)
                     ? QuantityCodes.Unknown
                     : (QuantityCodes)Enum.Parse(typeof(QuantityCodes), s);
             }
@@ -212,9 +213,15 @@ namespace OpenTrans.net
             {
                 return QuantityCodes.Unknown;
             }
-        } // !FromString()
+        }
+    }
 
-
+    public static class QuantityCodesExtensions
+    {
+        /// <summary>
+        /// Converts to UTF-16 text
+        /// </summary>
+        /// <returns></returns>
         public static string EnumToString(this QuantityCodes c)
         {
             return c.ToString("g");
