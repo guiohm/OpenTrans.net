@@ -6,9 +6,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -22,13 +22,7 @@ namespace OpenTrans.net
 {
     /// <summary>
     /// ISO Quantity Codes
-    /// 
-    /// for web reference, see e.g.
-    /// http://www.robert-kuhlemann.de/iso_masseinheiten.htm
-    /// </summary>
-    /// <summary>
-    /// ISO Quantity Codes
-    /// 
+    ///
     /// for web reference, see e.g.
     /// http://www.robert-kuhlemann.de/iso_masseinheiten.htm
     /// </summary>
@@ -112,7 +106,7 @@ namespace OpenTrans.net
 
         /// <summary>
         /// Millimeter
-        /// Abkürzung: mm 
+        /// Abkürzung: mm
         /// </summary>
         MMT,
 
@@ -124,7 +118,7 @@ namespace OpenTrans.net
 
         /// <summary>
         /// Kubikmeter
-        /// Abkürzung: m^3 
+        /// Abkürzung: m^3
         /// </summary>
         MTQ,
 
@@ -158,6 +152,11 @@ namespace OpenTrans.net
         PCE,
 
         /// <summary>
+        /// Paar (Pair)
+        /// </summary>
+        PR,
+
+        /// <summary>
         /// Set
         /// Abkürzung: Set(s)
         /// </summary>
@@ -183,13 +182,13 @@ namespace OpenTrans.net
 
         /// <summary>
         /// Jahr
-        /// Abkürzung: Jahr(e) 
+        /// Abkürzung: Jahr(e)
         /// </summary>
         ANN,
 
         /// <summary>
         /// Sekunde
-        /// Abkürzung: Sekunde(n) 
+        /// Abkürzung: Sekunde(n)
         /// </summary>
         SEC
     }
