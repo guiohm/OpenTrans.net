@@ -220,7 +220,7 @@ namespace OpenTrans.net
                 priceBaseFix = new PriceBaseFix
                 {
                     PriceUnitValue = XmlUtils.NodeAsDecimal(priceBaseFixRefNode, "./*[local-name()='PRICE_UNIT_VALUE']", nsmgr) ?? 0,
-                    PriceUnit = default(QuantityCodes).FromString(XmlUtils.NodeAsString(priceBaseFixRefNode, "./*[local-name()='PRICE_UNIT']", nsmgr)),
+                    PriceUnit = QuantityCode.FromString(XmlUtils.NodeAsString(priceBaseFixRefNode, "./*[local-name()='PRICE_UNIT']", nsmgr)),
                     PriceUnitFactor = XmlUtils.NodeAsDecimal(priceBaseFixRefNode, "./*[local-name()='PRICE_UNIT_FACTOR']", nsmgr),
                 };
             }

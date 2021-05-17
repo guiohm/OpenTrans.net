@@ -6,9 +6,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -101,9 +101,12 @@ namespace OpenTrans.net
 
             Writer.WriteStartElement("ORDER_SUMMARY");
             _writeAmount(Writer, "TOTAL_ITEM_NUM", order.OrderItems.Count);
-            _writeOptionalAmount(Writer, "TOTAL_AMOUNT ", order.OrderSummary.TotalAmount);
+            if (order.OrderSummary != null)
+            {
+                _writeOptionalAmount(Writer, "TOTAL_AMOUNT ", order.OrderSummary.TotalAmount);
+            }
             Writer.WriteEndElement(); // !ORDER_SUMMARY
-            
+
             Writer.WriteEndElement(); // !ORDER
             Writer.WriteEndDocument();
             Writer.Flush();
