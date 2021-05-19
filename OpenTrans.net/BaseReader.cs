@@ -79,31 +79,21 @@ namespace OpenTrans.net
         {
             string _temp = XmlUtils.NodeAsString(node, xpath, nsmgr);
 
-            if (_temp.Length == 8)
-            {
-                if (DateTime.TryParseExact(_temp, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime retval))
-                {
-                    return retval;
-                }
-            }
-            else if (_temp.Length == 10)
-            {
-                if (DateTime.TryParseExact(_temp, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime retval))
-                {
-                    return retval;
-                }
-            }
-            else
-            {
-                if (DateTime.TryParseExact(_temp, "yyyy-MM-ddThh:mm:sszzz", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime retval))
-                {
-                    return retval;
-                }
+            string[] formats = {
+                "yyyyMMdd",
+                "yyyy-MM-dd",
+                "yyyy-MM-ddThh:mm:sszzz",
+                "yyyy-MM-ddThh:mm:ss",
+            };
 
-                if (DateTime.TryParseExact(_temp, "yyyy-MM-ddThh:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out retval))
-                {
-                    return retval;
-                }
+            if (DateTime.TryParseExact(_temp, formats, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime retval))
+            {
+                return retval;
+            }
+
+            if (DateTime.TryParse(_temp, out retval))
+            {
+                return retval;
             }
 
             return null;

@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -34,10 +34,21 @@ namespace OpenTrans.net
         Unknown,
 
         /// <summary>
+        /// Bundle / Pack
+        /// </summary>
+        BE,
+
+        /// <summary>
+        /// Piece / Each
         /// Eins (Stück)
         /// Abkürzung: Stk.
         /// </summary>
         C62,
+
+        /// <summary>
+        /// Paperboard Container (Karton)
+        /// </summary>
+        CT,
 
         /// <summary>
         /// Tag

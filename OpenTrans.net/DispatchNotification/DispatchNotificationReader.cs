@@ -22,7 +22,7 @@ namespace OpenTrans.net
                 retval.NotificationDate = _nodeAsDateTime(headerNode, "./*[local-name()='DISPATCHNOTIFICATION_INFO']/*[local-name()='DISPATCHNOTIFICATION_DATE']", nsmgr);
                 retval.NotificationId = XmlUtils.NodeAsString(headerNode, "./*[local-name()='DISPATCHNOTIFICATION_INFO']/*[local-name()='DISPATCHNOTIFICATION_ID']", nsmgr);
 
-                XmlNode deliveryDateRefNode = headerNode.SelectSingleNode("./*[local-name()='DELIVERY_DATE']", nsmgr);
+                XmlNode deliveryDateRefNode = headerNode.SelectSingleNode("./*[local-name()='DISPATCHNOTIFICATION_INFO']/*[local-name()='DELIVERY_DATE']", nsmgr);
                 if (deliveryDateRefNode != null)
                 {
                     retval.DeliveryDate = new DeliveryDate
@@ -39,7 +39,7 @@ namespace OpenTrans.net
                     retval.Parties.Add(p);
                 }
 
-                XmlNode shipmentPartiesRefNode = headerNode.SelectSingleNode("./*[local-name()='SHIPMENT_PARTIES_REFERENCE']", nsmgr);
+                XmlNode shipmentPartiesRefNode = headerNode.SelectSingleNode("./*[local-name()='DISPATCHNOTIFICATION_INFO']/*[local-name()='SHIPMENT_PARTIES_REFERENCE']", nsmgr);
                 if (shipmentPartiesRefNode != null)
                 {
                     retval.ShipmentPartiesReference = new ShipmentPartiesReference
@@ -64,9 +64,9 @@ namespace OpenTrans.net
 
         private DispatchNotificationItem _readNotificationItem(OrderItem orderItem, XmlNode node, XmlNamespaceManager nsmgr)
         {
-            var retval = orderItem as DispatchNotificationItem;
+            var retval = new DispatchNotificationItem(orderItem);
 
-            XmlNode orderRefNode = node.SelectSingleNode("./*[local-name()='SUPPLIER_ORDER_REFERENCE']", nsmgr);
+            XmlNode orderRefNode = node.SelectSingleNode("./*[local-name()='ORDER_REFERENCE']", nsmgr);
             if (orderRefNode != null)
             {
                 retval.OrderRefecence = new OrderReference()

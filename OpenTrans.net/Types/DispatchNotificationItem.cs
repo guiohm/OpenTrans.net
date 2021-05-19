@@ -16,7 +16,6 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-using System.Collections.Generic;
 
 namespace OpenTrans.net
 {
@@ -29,6 +28,20 @@ namespace OpenTrans.net
         public SupplierOrderReference SupplierOrderReference { get; set; }
         public ShipmentPartiesReference ShipmentPartiesReference { get; set; }
         public LogisticDetails LogisticDetails { get; set; }
+
+        public DispatchNotificationItem() {}
+        public DispatchNotificationItem(OrderItem orderItem)
+        {
+            LineItemId = orderItem.LineItemId;
+            ProductId = orderItem.ProductId;
+            Quantity = orderItem.Quantity;
+            ProductPriceFix = orderItem.ProductPriceFix;
+            OrderUnit = orderItem.OrderUnit;
+            LineAmount = orderItem.LineAmount;
+            DeliveryDate = orderItem.DeliveryDate;
+            Remarks = orderItem.Remarks;
+            ProductFeatures = orderItem.ProductFeatures;
+        }
     }
 
     public class LogisticDetails
